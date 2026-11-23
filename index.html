@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مقياس شدة التأتأة (SSI-4) | Adham Salloum</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+  body { background-color: #f8fafc; color: #1e293b; line-height: 1.6; padding: 20px; }
+  .container { max-width: 900px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 30px; padding: 20px; background: #0f766e; color: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+  header h1 { font-size: 24px; margin-bottom: 8px; }
+  header p { font-size: 14px; opacity: 0.9; }
+  .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+  .card h2 { font-size: 18px; color: #0f766e; margin-bottom: 15px; border-bottom: 2px solid #ccfbf1; padding-bottom: 8px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  @media(max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #475569; }
+  input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-family: inherit; }
+  .result-box { text-align: center; margin-top: 20px; padding: 20px; background: #f0fdfa; border-radius: 12px; border: 1px solid #ccfbf1; }
+  .result-box h3 { color: #0f766e; font-size: 22px; margin-bottom: 10px; }
+  .result-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #cbd5e1; font-size: 16px; }
+  .result-item:last-child { border-bottom: none; font-weight: bold; font-size: 18px; color: #0f766e; }
+  .actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+  button { padding: 12px 24px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 15px; }
+  .btn-primary { background: #0f766e; color: white; }
+  .btn-primary:hover { background: #115e59; }
+  .btn-danger { background: #ef4444; color: white; }
+  .hidden { display: none; }
+  /* تنسيق الطباعة */
+  @media print {
+    body { background: white; padding: 0; }
+    .container { max-width: 100%; }
+    .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+    .actions, header p, .hidden-print { display: none !important; }
+    .result-box { border: 2px solid #000; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>مقياس شدة التأتأة (SSI-4)</h1>
+    <p>إعداد: أخصائي تقويم كلام ولغة Adham Salloum</p>
+  </header>
+
+  <div class="card">
+    <h2>بيانات المستفيد</h2>
+    <div class="grid">
+      <div><label>اسم المستفيد</label><input type="text" id="childName" placeholder="..."></div>
+      <div><label>تاريخ التقييم</label><input type="date" id="evalDate"></div>
+      <div>
+        <label>الفئة العمرية</label>
+        <select id="ageGroup">
+          <option value="preschool">مرحلة ما قبل المدرسة</option>
+          <option value="school">مرحلة المدرسة</option>
+          <option value="adult">بالغين</option>
+        </select>
+      </div>
+      <div><label>العمر</label><input type="number" id="age" placeholder="بالسنوات"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>1. تكرار التأتأة (Frequency)</h2>
+    <div class="grid">
+      <div><label>إجمالي عدد المقاطع (Syllables)</label><input type="number" id="totalSyllables" placeholder="بين 150 و 500"></div>
+      <div><label>عدد أحداث التأتأة</label><input type="number" id="stutteredSyllables" placeholder="مثال: 20"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. متوسط مدة أطول 3 أحداث تأتأة (Duration)</h2>
+    <label>اختر المدة الزمنية التقريبية</label>
+    <select id="duration">
+      <option value="0">لا يوجد تأتأة ملحوظة</option>
+      <option value="2">لحظي (أقل من نصف ثانية)</option>
+      <option value="4">نصف ثانية (0.5 - 0.9 ثانية)</option>
+      <option value="6">ثانية كاملة (1.0 - 1.9 ثانية)</option>
+      <option value="8">ثانيتان (2.0 - 2.9 ثانية)</option>
+      <option value="10">3 ثوانٍ (3.0 - 4.9 ثانية)</option>
+      <option value="12">5 ثوانٍ (5.0 - 9.9 ثانية)</option>
+      <option value="14">10 ثوانٍ (10.0 - 29.9 ثانية)</option>
+      <option value="16">30 ثانية (30.0 - 59.9 ثانية)</option>
+      <option value="18">دقيقة أو أكثر (60 ثانية أو أكثر)</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. السلوكيات المصاحبة (Physical Concomitants)</h2>
+    <p style="font-size:13px; margin-bottom:10px; color:#475569;">التقييم من 0 (لا يوجد) إلى 5 (شديد ومؤلم جداً):</p>
+    <div class="grid">
+      <div><label>أصوات مشتتة (Distracting Sounds)</label><select id="distracting"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+      <div><label>تعابير الوجه (Facial Grimaces)</label><select id="facial"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+      <div><label>حركة الرأس (Head Movements)</label><select id="head"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+      <div><label>حركة الأطراف (Movements of Extremities)</label><select id="extremities"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-primary" onclick="calculateSSI4()">حساب النتيجة</button>
+    <button class="btn-primary" onclick="window.print()" style="background:#0284c7;">🖨️ طباعة التقرير</button>
+    <button class="btn-danger" onclick="clearData()">مسح البيانات</button>
+  </div>
+
+  <div class="card hidden" id="resultArea">
+    <h2>نتائج التقييم (SSI-4)</h2>
+    <div class="result-box" id="resultBox"></div>
+  </div>
+</div>
+
+<script>
+function calculateSSI4() {
+  const total = parseFloat(document.getElementById('totalSyllables').value) || 0;
+  const stuttered = parseFloat(document.getElementById('stutteredSyllables').value) || 0;
+  const duration = parseFloat(document.getElementById('duration').value) || 0;
+  const ageGroup = document.getElementById('ageGroup').value;
+  const distracting = parseFloat(document.getElementById('distracting').value);
+  const facial = parseFloat(document.getElementById('facial').value);
+  const head = parseFloat(document.getElementById('head').value);
+  const extremities = parseFloat(document.getElementById('extremities').value);
+
+  if (total === 0) { alert('يرجى إدخال إجمالي المقاطع أولاً.'); return; }
+
+  const percent = (stuttered / total) * 100;
+  
+  let freqScore = 0;
+  if (percent >= 1 && percent < 2) freqScore = 2;
+  else if (percent >= 2 && percent < 3) freqScore = 4;
+  else if (percent >= 3 && percent < 4) freqScore = 5;
+  else if (percent >= 4 && percent < 5) freqScore = 5;
+  else if (percent >= 5 && percent < 6) freqScore = 6;
+  else if (percent >= 6 && percent < 7) freqScore = 6;
+  else if (percent >= 7 && percent < 8) freqScore = 6;
+  else if (percent >= 8 && percent < 12) freqScore = 7;
+  else if (percent >= 12 && percent < 13) freqScore = 8;
+  else if (percent >= 13 && percent < 21) freqScore = 8;
+  else if (percent >= 21) freqScore = 9;
+
+  const physicalScore = distracting + facial + head + extremities;
+  const totalScore = freqScore + duration + physicalScore;
+
+  let severity = '';
+  let severityColor = '';
+
+  if (ageGroup === 'preschool') {
+    if (totalScore >= 0 && totalScore <= 8) { severity = 'خفيف جداً'; severityColor = '#10b981'; }
+    else if (totalScore >= 9 && totalScore <= 12) { severity = 'خفيف'; severityColor = '#3b82f6'; }
+    else if (totalScore >= 13 && totalScore <= 23) { severity = 'متوسط'; severityColor = '#f59e0b'; }
+    else if (totalScore >= 24 && totalScore <= 31) { severity = 'شديد'; severityColor = '#ef4444'; }
+    else { severity = 'شديد جداً'; severityColor = '#7f1d1d'; }
+  } else if (ageGroup === 'school') {
+    if (totalScore >= 0 && totalScore <= 8) { severity = 'خفيف جداً'; severityColor = '#10b981'; }
+    else if (totalScore >= 9 && totalScore <= 15) { severity = 'خفيف'; severityColor = '#3b82f6'; }
+    else if (totalScore >= 16 && totalScore <= 23) { severity = 'متوسط'; severityColor = '#f59e0b'; }
+    else if (totalScore >= 24 && totalScore <= 35) { severity = 'شديد'; severityColor = '#ef4444'; }
+    else { severity = 'شديد جداً'; severityColor = '#7f1d1d'; }
+  } else {
+    if (totalScore >= 0 && totalScore <= 12) { severity = 'خفيف جداً'; severityColor = '#10b981'; }
+    else if (totalScore >= 13 && totalScore <= 20) { severity = 'خفيف'; severityColor = '#3b82f6'; }
+    else if (totalScore >= 21 && totalScore <= 27) { severity = 'متوسط'; severityColor = '#f59e0b'; }
+    else if (totalScore >= 28 && totalScore <= 36) { severity = 'شديد'; severityColor = '#ef4444'; }
+    else { severity = 'شديد جداً'; severityColor = '#7f1d1d'; }
+  }
+
+  const resultHTML = `
+    <h3>النتيجة النهائية: ${totalScore} نقطة</h3>
+    <div class="result-item"><span>نسبة التكرار (SS %):</span><span>${percent.toFixed(1)}%</span></div>
+    <div class="result-item"><span>درجة التكرار (Frequency Score):</span><span>${freqScore}</span></div>
+    <div class="result-item"><span>درجة المدة (Duration Score):</span><span>${duration}</span></div>
+    <div class="result-item"><span>درجة السلوكيات المصاحبة (Physical Score):</span><span>${physicalScore}</span></div>
+    <div class="result-item" style="color:${severityColor}; font-size: 20px; margin-top:10px;"><span>تصنيف الشدة:</span><span>${severity}</span></div>
+  `;
+  
+  document.getElementById('resultBox').innerHTML = resultHTML;
+  document.getElementById('resultArea').classList.remove('hidden');
+}
+
+function clearData() {
+  if(confirm('هل تريد مسح البيانات؟')) {
+    document.querySelectorAll('input, select').forEach(el => el.value = '');
+    document.getElementById('resultArea').classList.add('hidden');
+  }
+}
+</script>
+</body>
+</html>

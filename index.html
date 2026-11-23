@@ -18,6 +18,12 @@
   @media(max-width: 600px) { .grid { grid-template-columns: 1fr; } }
   label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #475569; }
   input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-family: inherit; }
+  
+  /* تنسيق خاص لخيارات السلوكيات */
+  .behavior-item { background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px; }
+  .behavior-item label { color: #0f766e; margin-bottom: 2px; }
+  .behavior-item p { font-size: 12px; color: #64748b; margin-bottom: 5px; }
+
   .result-box { text-align: center; margin-top: 20px; padding: 20px; background: #f0fdfa; border-radius: 12px; border: 1px solid #ccfbf1; }
   .result-box h3 { color: #0f766e; font-size: 22px; margin-bottom: 10px; }
   .result-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #cbd5e1; font-size: 16px; }
@@ -28,7 +34,6 @@
   .btn-primary:hover { background: #115e59; }
   .btn-danger { background: #ef4444; color: white; }
   .hidden { display: none; }
-  /* تنسيق الطباعة */
   @media print {
     body { background: white; padding: 0; }
     .container { max-width: 100%; }
@@ -63,6 +68,16 @@
   </div>
 
   <div class="card">
+    <h2>طريقة جمع العينة (Task Type)</h2>
+    <label>اختر نوع العينة التي تم جمعها:</label>
+    <select id="taskType">
+      <option value="reading">1. مهمة القراءة (Reading Task)</option>
+      <option value="speaking_reader">2. مهمة الكلام العفوي (Speaking Task) - للمستفيد القارئ</option>
+      <option value="nonreader">3. مهمة الكلام العفوي (Speaking Task) - لغير القارئ</option>
+    </select>
+  </div>
+
+  <div class="card">
     <h2>1. تكرار التأتأة (Frequency)</h2>
     <div class="grid">
       <div><label>إجمالي عدد المقاطع (Syllables)</label><input type="number" id="totalSyllables" placeholder="بين 150 و 500"></div>
@@ -89,12 +104,30 @@
 
   <div class="card">
     <h2>3. السلوكيات المصاحبة (Physical Concomitants)</h2>
-    <p style="font-size:13px; margin-bottom:10px; color:#475569;">التقييم من 0 (لا يوجد) إلى 5 (شديد ومؤلم جداً):</p>
-    <div class="grid">
-      <div><label>أصوات مشتتة (Distracting Sounds)</label><select id="distracting"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
-      <div><label>تعابير الوجه (Facial Grimaces)</label><select id="facial"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
-      <div><label>حركة الرأس (Head Movements)</label><select id="head"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
-      <div><label>حركة الأطراف (Movements of Extremities)</label><select id="extremities"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+    <p style="font-size:13px; margin-bottom:15px; color:#475569;">قيّم كل سلوك من 0 (لا يوجد) إلى 5 (شديد جداً).</p>
+    
+    <div class="behavior-item">
+      <label>أصوات مشتتة (Distracting Sounds)</label>
+      <p>مثل: تنفس صاخب، صفير، شهيق، نفخ، نقر، إلخ.</p>
+      <select id="distracting"><option value="0">0 - لا يوجد</option><option value="1">1 - غير ملحوظ</option><option value="2">2 - ملحوظ قليلاً</option><option value="3">3 - مشتت</option><option value="4">4 - مشتت جداً</option><option value="5">5 - شديد ومؤلم</option></select>
+    </div>
+
+    <div class="behavior-item">
+      <label>تعابير الوجه (Facial Grimaces)</label>
+      <p>مثل: تحريك الفك، إخراج اللسان، ضغط الشفاه، توتر عضلات الفك.</p>
+      <select id="facial"><option value="0">0 - لا يوجد</option><option value="1">1 - غير ملحوظ</option><option value="2">2 - ملحوظ قليلاً</option><option value="3">3 - مشتت</option><option value="4">4 - مشتت جداً</option><option value="5">5 - شديد ومؤلم</option></select>
+    </div>
+
+    <div class="behavior-item">
+      <label>حركة الرأس (Head Movements)</label>
+      <p>مثل: الرجوع للخلف، النظر بعيداً، إغلاق العينين، الاتصال البصري الضعيف.</p>
+      <select id="head"><option value="0">0 - لا يوجد</option><option value="1">1 - غير ملحوظ</option><option value="2">2 - ملحوظ قليلاً</option><option value="3">3 - مشتت</option><option value="4">4 - مشتت جداً</option><option value="5">5 - شديد ومؤلم</option></select>
+    </div>
+
+    <div class="behavior-item">
+      <label>حركة الأطراف (Movements of Extremities)</label>
+      <p>مثل: حركة اليدين والذراعين، لمس الوجه، حركات الجذع، تحريك القدمين، إلخ.</p>
+      <select id="extremities"><option value="0">0 - لا يوجد</option><option value="1">1 - غير ملحوظ</option><option value="2">2 - ملحوظ قليلاً</option><option value="3">3 - مشتت</option><option value="4">4 - مشتت جداً</option><option value="5">5 - شديد ومؤلم</option></select>
     </div>
   </div>
 
@@ -116,6 +149,7 @@ function calculateSSI4() {
   const stuttered = parseFloat(document.getElementById('stutteredSyllables').value) || 0;
   const duration = parseFloat(document.getElementById('duration').value) || 0;
   const ageGroup = document.getElementById('ageGroup').value;
+  const taskType = document.getElementById('taskType').value;
   const distracting = parseFloat(document.getElementById('distracting').value);
   const facial = parseFloat(document.getElementById('facial').value);
   const head = parseFloat(document.getElementById('head').value);
@@ -126,17 +160,43 @@ function calculateSSI4() {
   const percent = (stuttered / total) * 100;
   
   let freqScore = 0;
-  if (percent >= 1 && percent < 2) freqScore = 2;
-  else if (percent >= 2 && percent < 3) freqScore = 4;
-  else if (percent >= 3 && percent < 4) freqScore = 5;
-  else if (percent >= 4 && percent < 5) freqScore = 5;
-  else if (percent >= 5 && percent < 6) freqScore = 6;
-  else if (percent >= 6 && percent < 7) freqScore = 6;
-  else if (percent >= 7 && percent < 8) freqScore = 6;
-  else if (percent >= 8 && percent < 12) freqScore = 7;
-  else if (percent >= 12 && percent < 13) freqScore = 8;
-  else if (percent >= 13 && percent < 21) freqScore = 8;
-  else if (percent >= 21) freqScore = 9;
+
+  // 1. جدول القراءة (1. Reading Task)
+  if (taskType === 'reading') {
+    if (percent >= 1 && percent < 2) freqScore = 2;
+    else if (percent >= 2 && percent < 3) freqScore = 3;
+    else if (percent >= 3 && percent < 4) freqScore = 4;
+    else if (percent >= 4 && percent < 5) freqScore = 5;
+    else if (percent >= 5 && percent < 6) freqScore = 6;
+    else if (percent >= 6 && percent < 8) freqScore = 7;
+    else if (percent >= 8 && percent < 13) freqScore = 8;
+    else if (percent >= 13 && percent < 21) freqScore = 9;
+    else if (percent >= 21) freqScore = 10;
+  } 
+  // 2. جدول الكلام العفوي للقارئين (2. Speaking Task - Reader)
+  else if (taskType === 'speaking_reader') {
+    if (percent >= 1 && percent < 2) freqScore = 2;
+    else if (percent >= 2 && percent < 3) freqScore = 3;
+    else if (percent >= 3 && percent < 4) freqScore = 4;
+    else if (percent >= 4 && percent < 5) freqScore = 5;
+    else if (percent >= 5 && percent < 6) freqScore = 6;
+    else if (percent >= 6 && percent < 8) freqScore = 7;
+    else if (percent >= 8 && percent < 13) freqScore = 8;
+    else if (percent >= 13 && percent < 21) freqScore = 9;
+    else if (percent >= 21) freqScore = 10;
+  } 
+  // 3. جدول غير القارئين (3. Nonreaders Table)
+  else {
+    if (percent >= 1 && percent < 2) freqScore = 4;
+    else if (percent >= 2 && percent < 3) freqScore = 6;
+    else if (percent >= 3 && percent < 4) freqScore = 8;
+    else if (percent >= 4 && percent < 5) freqScore = 10;
+    else if (percent >= 5 && percent < 6) freqScore = 12;
+    else if (percent >= 6 && percent < 8) freqScore = 12;
+    else if (percent >= 8 && percent < 13) freqScore = 14;
+    else if (percent >= 13 && percent < 21) freqScore = 16;
+    else if (percent >= 21) freqScore = 18;
+  }
 
   const physicalScore = distracting + facial + head + extremities;
   const totalScore = freqScore + duration + physicalScore;
@@ -164,8 +224,14 @@ function calculateSSI4() {
     else { severity = 'شديد جداً'; severityColor = '#7f1d1d'; }
   }
 
+  let taskTypeName = '';
+  if (taskType === 'reading') taskTypeName = 'قراءة (Reading)';
+  else if (taskType === 'speaking_reader') taskTypeName = 'كلام عفوي - قارئ (Speaking - Reader)';
+  else taskTypeName = 'كلام عفوي - غير قارئ (Speaking - Nonreader)';
+
   const resultHTML = `
     <h3>النتيجة النهائية: ${totalScore} نقطة</h3>
+    <div class="result-item"><span>نوع العينة:</span><span>${taskTypeName}</span></div>
     <div class="result-item"><span>نسبة التكرار (SS %):</span><span>${percent.toFixed(1)}%</span></div>
     <div class="result-item"><span>درجة التكرار (Frequency Score):</span><span>${freqScore}</span></div>
     <div class="result-item"><span>درجة المدة (Duration Score):</span><span>${duration}</span></div>

@@ -155,6 +155,22 @@
     </div>
   </div>
 
+  <div class="card">
+    <h2>5. طبيعية الكلام (Speech Naturalness)</h2>
+    <label>تقييم طبيعية الكلام (1 = طبيعي جداً، 9 = غير طبيعي جداً)</label>
+    <select id="naturalness">
+      <option value="1">1 - طبيعي جداً</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5 - متوسط</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9 - غير طبيعي جداً</option>
+    </select>
+  </div>
+
   <div class="actions">
     <button class="btn-primary" onclick="calculateSSI4()">حساب النتيجة</button>
     <button class="btn-primary" onclick="window.print()" style="background:#0284c7;">🖨️ طباعة التقرير</button>
@@ -181,6 +197,7 @@ function calculateSSI4() {
   const taskType = document.getElementById('taskType').value;
   const duration = parseFloat(document.getElementById('duration').value) || 0;
   const ageGroup = document.getElementById('ageGroup').value;
+  const naturalness = document.getElementById('naturalness').value;
   
   const distracting = parseFloat(document.getElementById('distracting').value);
   const facial = parseFloat(document.getElementById('facial').value);
@@ -196,20 +213,16 @@ function calculateSSI4() {
   let freqScore = 0;
 
   if (taskType === 'reading_and_speaking') {
-    // حساب عينة القراءة
     const readTotal = parseFloat(document.getElementById('readTotalSyllables').value) || 0;
     const readStuttered = parseFloat(document.getElementById('readStuttered').value) || 0;
     const readPercent = readTotal > 0 ? (readStuttered / readTotal) * 100 : 0;
 
-    // حساب عينة الكلام العفوي
     const speakTotal = parseFloat(document.getElementById('speakTotalSyllables').value) || 0;
     const speakStuttered = parseFloat(document.getElementById('speakStuttered').value) || 0;
     const speakPercent = speakTotal > 0 ? (speakStuttered / speakTotal) * 100 : 0;
 
-    // حساب المتوسط
     percent = (readPercent + speakPercent) / 2;
 
-    // تطبيق جدول القارئين (متوسط الجدولين 1 و 2)
     if (percent >= 1 && percent < 2) freqScore = 2;
     else if (percent >= 2 && percent < 3) freqScore = 3;
     else if (percent >= 3 && percent < 4) freqScore = 4;
@@ -221,12 +234,10 @@ function calculateSSI4() {
     else if (percent >= 21) freqScore = 10;
 
   } else {
-    // غير قارئ (كلام عفوي فقط)
     const speakTotal = parseFloat(document.getElementById('speakTotalSyllables').value) || 0;
     const speakStuttered = parseFloat(document.getElementById('speakStuttered').value) || 0;
     percent = speakTotal > 0 ? (speakStuttered / speakTotal) * 100 : 0;
 
-    // تطبيق جدول غير القارئين (الجدول 3)
     if (percent >= 1 && percent < 2) freqScore = 4;
     else if (percent >= 2 && percent < 3) freqScore = 6;
     else if (percent >= 3 && percent < 4) freqScore = 8;
@@ -278,6 +289,7 @@ function calculateSSI4() {
     <div class="result-item"><span>درجة المدة (Duration Score):</span><span>${duration}</span></div>
     <div class="result-item"><span>درجة السلوكيات المصاحبة (Physical Score):</span><span>${physicalScore}</span></div>
     <div class="result-item" style="color:${severityColor}; font-size: 20px; margin-top:10px;"><span>تصنيف الشدة:</span><span>${severity}</span></div>
+    <div class="result-item" style="margin-top:10px;"><span>طبيعية الكلام (Speech Naturalness):</span><span>${naturalness} / 9</span></div>
     ${notesHTML ? '<hr style="margin:15px 0; border:1px dashed #ccc;">' + notesHTML : ''}
   `;
   

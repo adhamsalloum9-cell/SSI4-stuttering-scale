@@ -24,7 +24,7 @@
   .behavior-item label { color: #0f766e; margin-bottom: 2px; font-size: 15px; }
   .behavior-item p { font-size: 12px; color: #64748b; margin-bottom: 10px; }
   .behavior-row { display: flex; gap: 10px; align-items: flex-start; }
-  .behavior-row select { width: 120px; flex-shrink: 0; }
+  .behavior-row select { width: 100px; flex-shrink: 0; }
   .behavior-row textarea { flex-grow: 1; min-height: 40px; }
 
   .result-box { text-align: center; margin-top: 20px; padding: 20px; background: #f0fdfa; border-radius: 12px; border: 1px solid #ccfbf1; }
@@ -75,23 +75,30 @@
   <div class="card">
     <h2>طريقة جمع العينة (Task Type)</h2>
     <label>اختر نوع العينة التي تم جمعها:</label>
-    <select id="taskType">
-      <option value="reading">1. مهمة القراءة (Reading Task)</option>
-      <option value="speaking_reader">2. مهمة الكلام العفوي (Speaking Task) - للمستفيد القارئ</option>
-      <option value="nonreader">3. مهمة الكلام العفوي (Speaking Task) - لغير القارئ</option>
+    <select id="taskType" onchange="toggleSampleFields()">
+      <option value="reading_and_speaking">قارئ (عينة قراءة + عينة كلام عفوي)</option>
+      <option value="nonreader">غير قارئ (عينة كلام عفوي فقط)</option>
     </select>
   </div>
 
-  <div class="card">
-    <h2>1. تكرار التأتأة (Frequency)</h2>
+  <div class="card" id="readingSampleCard">
+    <h2>1. عينة القراءة (Reading Task)</h2>
     <div class="grid">
-      <div><label>إجمالي عدد المقاطع (Syllables)</label><input type="number" id="totalSyllables" placeholder="بين 150 و 500"></div>
-      <div><label>عدد أحداث التأتأة</label><input type="number" id="stutteredSyllables" placeholder="مثال: 20"></div>
+      <div><label>إجمالي عدد المقاطع (Syllables)</label><input type="number" id="readTotalSyllables" placeholder="بين 150 و 500"></div>
+      <div><label>عدد أحداث التأتأة</label><input type="number" id="readStuttered" placeholder="..."></div>
+    </div>
+  </div>
+
+  <div class="card" id="speakingSampleCard">
+    <h2>2. عينة الكلام العفوي (Speaking Task)</h2>
+    <div class="grid">
+      <div><label>إجمالي عدد المقاطع (Syllables)</label><input type="number" id="speakTotalSyllables" placeholder="بين 150 و 500"></div>
+      <div><label>عدد أحداث التأتأة</label><input type="number" id="speakStuttered" placeholder="..."></div>
     </div>
   </div>
 
   <div class="card">
-    <h2>2. متوسط مدة أطول 3 أحداث تأتأة (Duration)</h2>
+    <h2>3. متوسط مدة أطول 3 أحداث تأتأة (Duration)</h2>
     <label>اختر المدة الزمنية التقريبية</label>
     <select id="duration">
       <option value="0">لا يوجد تأتأة ملحوظة</option>
@@ -108,7 +115,7 @@
   </div>
 
   <div class="card">
-    <h2>3. السلوكيات المصاحبة (Physical Concomitants)</h2>
+    <h2>4. السلوكيات المصاحبة (Physical Concomitants)</h2>
     <p style="font-size:13px; margin-bottom:15px; color:#475569;">قيّم كل سلوك من 0 إلى 5، واكتب ملاحظاتك.</p>
     
     <div class="behavior-item">
@@ -161,30 +168,48 @@
 </div>
 
 <script>
+function toggleSampleFields() {
+  const taskType = document.getElementById('taskType').value;
+  if (taskType === 'nonreader') {
+    document.getElementById('readingSampleCard').classList.add('hidden');
+  } else {
+    document.getElementById('readingSampleCard').classList.remove('hidden');
+  }
+}
+
 function calculateSSI4() {
-  const total = parseFloat(document.getElementById('totalSyllables').value) || 0;
-  const stuttered = parseFloat(document.getElementById('stutteredSyllables').value) || 0;
+  const taskType = document.getElementById('taskType').value;
   const duration = parseFloat(document.getElementById('duration').value) || 0;
   const ageGroup = document.getElementById('ageGroup').value;
-  const taskType = document.getElementById('taskType').value;
   
   const distracting = parseFloat(document.getElementById('distracting').value);
   const facial = parseFloat(document.getElementById('facial').value);
   const head = parseFloat(document.getElementById('head').value);
   const extremities = parseFloat(document.getElementById('extremities').value);
 
-  // جلب الملاحظات النصية
   const distractingNotes = document.getElementById('distractingNotes').value;
   const facialNotes = document.getElementById('facialNotes').value;
   const headNotes = document.getElementById('headNotes').value;
   const extremitiesNotes = document.getElementById('extremitiesNotes').value;
 
-  if (total === 0) { alert('يرجى إدخال إجمالي المقاطع أولاً.'); return; }
-
-  const percent = (stuttered / total) * 100;
-  
+  let percent = 0;
   let freqScore = 0;
-  if (taskType === 'reading') {
+
+  if (taskType === 'reading_and_speaking') {
+    // حساب عينة القراءة
+    const readTotal = parseFloat(document.getElementById('readTotalSyllables').value) || 0;
+    const readStuttered = parseFloat(document.getElementById('readStuttered').value) || 0;
+    const readPercent = readTotal > 0 ? (readStuttered / readTotal) * 100 : 0;
+
+    // حساب عينة الكلام العفوي
+    const speakTotal = parseFloat(document.getElementById('speakTotalSyllables').value) || 0;
+    const speakStuttered = parseFloat(document.getElementById('speakStuttered').value) || 0;
+    const speakPercent = speakTotal > 0 ? (speakStuttered / speakTotal) * 100 : 0;
+
+    // حساب المتوسط
+    percent = (readPercent + speakPercent) / 2;
+
+    // تطبيق جدول القارئين (متوسط الجدولين 1 و 2)
     if (percent >= 1 && percent < 2) freqScore = 2;
     else if (percent >= 2 && percent < 3) freqScore = 3;
     else if (percent >= 3 && percent < 4) freqScore = 4;
@@ -194,17 +219,14 @@ function calculateSSI4() {
     else if (percent >= 8 && percent < 13) freqScore = 8;
     else if (percent >= 13 && percent < 21) freqScore = 9;
     else if (percent >= 21) freqScore = 10;
-  } else if (taskType === 'speaking_reader') {
-    if (percent >= 1 && percent < 2) freqScore = 2;
-    else if (percent >= 2 && percent < 3) freqScore = 3;
-    else if (percent >= 3 && percent < 4) freqScore = 4;
-    else if (percent >= 4 && percent < 5) freqScore = 5;
-    else if (percent >= 5 && percent < 6) freqScore = 6;
-    else if (percent >= 6 && percent < 8) freqScore = 7;
-    else if (percent >= 8 && percent < 13) freqScore = 8;
-    else if (percent >= 13 && percent < 21) freqScore = 9;
-    else if (percent >= 21) freqScore = 10;
+
   } else {
+    // غير قارئ (كلام عفوي فقط)
+    const speakTotal = parseFloat(document.getElementById('speakTotalSyllables').value) || 0;
+    const speakStuttered = parseFloat(document.getElementById('speakStuttered').value) || 0;
+    percent = speakTotal > 0 ? (speakStuttered / speakTotal) * 100 : 0;
+
+    // تطبيق جدول غير القارئين (الجدول 3)
     if (percent >= 1 && percent < 2) freqScore = 4;
     else if (percent >= 2 && percent < 3) freqScore = 6;
     else if (percent >= 3 && percent < 4) freqScore = 8;
@@ -242,11 +264,6 @@ function calculateSSI4() {
     else { severity = 'شديد جداً'; severityColor = '#7f1d1d'; }
   }
 
-  let taskTypeName = '';
-  if (taskType === 'reading') taskTypeName = 'قراءة (Reading)';
-  else if (taskType === 'speaking_reader') taskTypeName = 'كلام عفوي - قارئ (Speaking - Reader)';
-  else taskTypeName = 'كلام عفوي - غير قارئ (Speaking - Nonreader)';
-
   let notesHTML = '';
   if (distractingNotes) notesHTML += `<div style="text-align:right; font-size:14px; margin-top:5px; color:#475569;"><b>ملاحظات الأصوات:</b> ${distractingNotes}</div>`;
   if (facialNotes) notesHTML += `<div style="text-align:right; font-size:14px; margin-top:5px; color:#475569;"><b>ملاحظات الوجه:</b> ${facialNotes}</div>`;
@@ -255,7 +272,7 @@ function calculateSSI4() {
 
   const resultHTML = `
     <h3>النتيجة النهائية: ${totalScore} نقطة</h3>
-    <div class="result-item"><span>نوع العينة:</span><span>${taskTypeName}</span></div>
+    <div class="result-item"><span>نوع العينة:</span><span>${taskType === 'reading_and_speaking' ? 'قراءة + كلام عفوي' : 'كلام عفوي فقط'}</span></div>
     <div class="result-item"><span>نسبة التكرار (SS %):</span><span>${percent.toFixed(1)}%</span></div>
     <div class="result-item"><span>درجة التكرار (Frequency Score):</span><span>${freqScore}</span></div>
     <div class="result-item"><span>درجة المدة (Duration Score):</span><span>${duration}</span></div>
